@@ -13,8 +13,8 @@ launch. Fix them in order, then delete this file.
 
 ## 1. ~~Fix module path / repo URL mismatch~~ ✅ FIXED
 
-**Resolved.** Option B was applied: the module path was updated from
-`github.com/schemaguard/schemaguard` to
+**Resolved and publicly verified.** Option B was applied: the module
+path was updated from `github.com/schemaguard/schemaguard` to
 `github.com/alpha-code-labs/schemaguard` across go.mod, all internal
 imports (~10 Go files), the README (install, clone, and Action
 references), the Makefile ldflags, DECISIONS.md, and the demo
@@ -22,16 +22,19 @@ workflow comment. Option A (creating a `schemaguard` GitHub org) was
 not feasible because the `schemaguard` org already exists on GitHub
 and belongs to a different owner.
 
-The fix was committed, v0.1.0 was retagged on the new commit, and
-the GitHub release was updated. A live install test with
-`GOPRIVATE` (the repo is still private) confirmed that
-`go install github.com/alpha-code-labs/schemaguard/cmd/schemaguard@v0.1.0`
-resolves and builds correctly. Once the repo is made public (a
-launch-day action), the install will work for everyone without
-`GOPRIVATE`.
+The repo has been made public. Public verification performed:
 
-**Remaining launch-day action:** Make the repo public before any
-public posting so the Go module proxy can fetch the code.
+- GitHub API confirms `private: false`, `visibility: public`.
+- GitHub release `v0.1.0` is publicly accessible (HTTP 200).
+- Unauthenticated `git ls-remote` resolves the `v0.1.0` tag.
+- `proxy.golang.org` returns HTTP 200 for the module info.
+- **`go install github.com/alpha-code-labs/schemaguard/cmd/schemaguard@v0.1.0`
+  succeeds with default GOPROXY, no GOPRIVATE, no GONOSUMCHECK** —
+  the exact command a real user would run. Binary installs and runs.
+- The README's `git clone` URL and Action `uses:` reference are
+  correct for the public repo.
+
+**No remaining launch-day action for this item.**
 
 ---
 
