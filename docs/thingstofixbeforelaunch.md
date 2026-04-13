@@ -87,37 +87,24 @@ Both images are from real product runs — nothing is mocked.
 
 ---
 
-## 4. Draft Show HN title and first comment
+## 4. ~~Draft Show HN title + first comment~~ ✅ FIXED
 
-**Issue.** The Show HN post has not been drafted. The launch plan
-says it should be "written and edited a week before launch." Hacker
-News is the primary launch channel for a technical OSS tool
-targeting platform engineers.
+**Resolved.** Full draft committed at `docs/show_hn_draft.md`.
+Includes:
 
-**Why it matters.** The title and first comment determine whether
-the post gets traction. A well-crafted title stops the scroll; a
-strong first comment earns upvotes and keeps the post on the front
-page. You get one shot — a weak title or a rambling first comment
-wastes the launch window.
+- Primary title + two backup options
+- Submission URL (the GitHub repo — no marketing page)
+- Complete first comment: founder intro (one sentence, no padding),
+  pain story, what it does technically, three-way comparison with
+  Squawk/Atlas/Datafold (honest, non-derivative), what shipped and
+  what didn't, three specific feedback questions, and thanks
+- A wording-alignment table showing how each paragraph matches the
+  launch-plan guidance
+- A pre-post checklist for launch morning
 
-**Blocks launch?** Does not block making the repo public. **Does
-block the launch-day sequence** — you cannot post on HN without
-writing the post.
-
-**Smallest next action.** Draft exactly two things:
-
-1. **Title:** `Show HN: SchemaGuard – Runs your Postgres migration
-   in CI and reports what will break` (directly from the launch
-   plan's suggested format).
-
-2. **First comment:** One sentence on who you are (no credential
-   padding). One sentence on why you built it. One honest sentence
-   on how it differs from Squawk. One honest sentence on how it
-   differs from Atlas. What feedback you want. Thanks. Keep it
-   under 200 words. Edit it three times before launch day.
-
-Takes ~30 minutes to draft, plus a few editing passes over the
-following days.
+The draft avoids every banned phrase from `docs/launch_plan.md` and
+describes only the shipped v0.1.0 product (no dbt, no future
+promises). Ready for one final editing pass before launch day.
 
 ---
 
