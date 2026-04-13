@@ -21,3 +21,4 @@
 
 ALTER TABLE orders RENAME COLUMN customer_id TO user_id;
 -- This PR tests the RENAME COLUMN migration end-to-end via CI.
+-- Pushed a second time to verify comment upsert.
