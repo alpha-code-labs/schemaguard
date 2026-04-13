@@ -65,27 +65,25 @@ real, and sufficient for launch.
 
 ---
 
-## 3. Take screenshots
+## 3. ~~Take screenshots~~ ✅ FIXED
 
-**Issue.** The launch plan lists two screenshots:
-- One hero screenshot of a PR comment with findings
-- One terminal screenshot showing the CLI text output
+**Resolved.** Both launch-plan screenshots now exist in `assets/`:
 
-Neither exists in the repo.
+1. **`assets/pr-comment.png`** (920×600, 72 KB) — hero screenshot of
+   the real SchemaGuard PR comment from PR #1. Shows 🔴 Stop verdict,
+   Query Plan Regressions table, both broken-query findings, footer,
+   and bot attribution. Already embedded in the README as the visual
+   hook (done in item #2). Doubles as the hero screenshot asset.
 
-**Why it matters.** Screenshots provide quick visual evidence for
-anyone reading the README, a Show HN post, or a tweet without
-running the tool themselves. They are less impactful than the GIF
-but still useful for static contexts (blog posts, newsletters).
+2. **`assets/cli-output.png`** (900×620, 107 KB) — terminal
+   screenshot of a real `schemaguard check` run against demo migration
+   01 (ADD COLUMN NOT NULL DEFAULT with volatile default). Shows the
+   command, the 🔴 STOP verdict, the Lock Risk section with five
+   findings at stop/caution severity, and the footer. Rendered from
+   real CLI output via a styled terminal HTML page + headless Chrome.
+   Available for Show HN posts, blog posts, and social sharing.
 
-**Blocks launch?** No. Secondary asset.
-
-**Smallest next action.** Take a screenshot of the PR comment on
-PR #1 (`alpha-code-labs/schemaguard#1`). Run `schemaguard check`
-locally against demo migration 01 and screenshot the terminal
-output. Save both as PNGs in an `assets/` or `docs/images/`
-directory and optionally embed in the README below the GIF. Takes
-~10 minutes.
+Both images are from real product runs — nothing is mocked.
 
 ---
 
