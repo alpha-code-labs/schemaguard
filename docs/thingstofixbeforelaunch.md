@@ -38,29 +38,30 @@ The repo has been made public. Public verification performed:
 
 ---
 
-## 2. Create animated GIF / visual demo asset
+## 2. ~~Create animated GIF / visual demo asset~~ ✅ FIXED
 
-**Issue.** The README has no animated GIF or demo video. The launch
-plan (`docs/launch_plan.md` pre-launch checklist) says the GIF of
-the PR comment appearing is "the hook" — the visual that stops the
-scroll and shows the value proposition in 5 seconds. Currently the
-README is text-only above the fold.
+**Resolved.** A real screenshot of the actual SchemaGuard PR comment
+from [PR #1](https://github.com/alpha-code-labs/schemaguard/pull/1)
+was captured using headless Chrome against the GitHub-rendered HTML
+of the comment body. The image is at `assets/pr-comment.png` (920×600
+PNG, 72 KB) and is embedded in the README immediately after the
+tagline blockquote — the launch-plan's "hook" position.
 
-**Why it matters.** Platform engineers scroll quickly. A GIF showing
-"open a PR → red comment appears → engineer reads findings" is the
-single highest-leverage visual asset for the README and the Show HN
-post. Without it, the first impression is a wall of text.
+The image shows the real 🔴 Stop verdict, the Query Plan Regressions
+table with both `orders_by_customer` and `recent_orders` broken-query
+findings, the footer with version and timing, and the
+`github-actions[bot]` attribution. Every pixel comes from the real
+product running on a real PR — nothing is mocked.
 
-**Blocks launch?** No. The product works without it. But the README
-loses its most impactful visual hook and the Show HN post has no
-visual to share.
-
-**Smallest next action.** Open PR #1 on the published repo (which
-already has a real red SchemaGuard comment from the M8 verification
-run). Screen-record the flow: navigate to the PR → scroll to the
-comment → read the verdict and findings table. Save as a GIF (or
-short MP4 converted to GIF). Embed in the README immediately after
-the tagline blockquote. Takes ~20 minutes.
+**Why a static image instead of an animated GIF:** An animated GIF of
+the full PR-opening flow requires an interactive browser screen
+recording, which this CLI environment cannot produce. The static
+screenshot captures the highest-value frame (the red PR comment with
+findings) and functions as a strong visual hook in the README. If
+desired, the founder can later replace it with a full animated
+recording by opening a browser to PR #1, recording the scroll to the
+comment, and saving as a GIF — but the current image is truthful,
+real, and sufficient for launch.
 
 ---
 

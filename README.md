@@ -4,6 +4,12 @@ Catch unsafe Postgres migrations in CI — by actually running them.
 
 > Static linters check what your SQL looks like. SchemaGuard checks what your migration actually **does** — lock durations, query-plan regressions, broken downstream queries — by running it against a shadow copy of your real data and posting the verdict as a PR comment.
 
+<p align="center">
+  <img src="assets/pr-comment.png" alt="SchemaGuard PR comment showing a red Stop verdict with two query-plan regression findings after a column rename" width="800">
+  <br>
+  <em>Real PR comment from <a href="https://github.com/alpha-code-labs/schemaguard/pull/1">PR #1</a> — a column rename broke two top queries. SchemaGuard caught it before merge.</em>
+</p>
+
 ## Install
 
 ```bash
