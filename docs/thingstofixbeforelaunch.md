@@ -11,41 +11,27 @@ launch. Fix them in order, then delete this file.
 
 ---
 
-## 1. Fix module path / repo URL mismatch
+## 1. ~~Fix module path / repo URL mismatch~~ ✅ FIXED
 
-**Issue.** `go.mod` declares `module github.com/schemaguard/schemaguard`.
-Every internal import, every `go install` command in the README, the
-`git clone` URL, and the GitHub Action `uses:` reference all use
-`github.com/schemaguard/schemaguard`. But the actual repo lives at
-`github.com/alpha-code-labs/schemaguard`. Go's module proxy resolves
-the module path by fetching from the declared GitHub URL. Since
-`github.com/schemaguard/schemaguard` does not exist as a repository,
-every external `go install` and `go get` will fail with a 404.
+**Resolved.** Option B was applied: the module path was updated from
+`github.com/schemaguard/schemaguard` to
+`github.com/alpha-code-labs/schemaguard` across go.mod, all internal
+imports (~10 Go files), the README (install, clone, and Action
+references), the Makefile ldflags, DECISIONS.md, and the demo
+workflow comment. Option A (creating a `schemaguard` GitHub org) was
+not feasible because the `schemaguard` org already exists on GitHub
+and belongs to a different owner.
 
-**Why it matters.** This is the install path. If it does not work, no
-one outside this machine can install or use the product.
-`docs/launch_plan.md` mistake #1: "One broken install command on
-Day 1 kills the launch."
+The fix was committed, v0.1.0 was retagged on the new commit, and
+the GitHub release was updated. A live install test with
+`GOPRIVATE` (the repo is still private) confirmed that
+`go install github.com/alpha-code-labs/schemaguard/cmd/schemaguard@v0.1.0`
+resolves and builds correctly. Once the repo is made public (a
+launch-day action), the install will work for everyone without
+`GOPRIVATE`.
 
-**Blocks launch?** **Yes.** Hard blocker. No external user can install
-until this is resolved.
-
-**Smallest next action.** Either:
-
-- **(a) Create a `schemaguard` GitHub organization** and transfer
-  (or fork) the repo to `github.com/schemaguard/schemaguard`. This
-  makes every existing reference (go.mod, README, Action) correct
-  with zero code changes. GitHub automatically redirects the old URL
-  after a transfer. Then retag v0.1.0 on the new repo.
-
-- **(b) Update `go.mod` to `module github.com/alpha-code-labs/schemaguard`**,
-  update every `import` statement across the codebase (~20 files),
-  update the README install/clone/Action references, update
-  `action.yml` and the demo workflow, re-commit, retag, and
-  re-release. More invasive but does not require a new GitHub org.
-
-Option (a) is cleaner. Option (b) is self-contained. Pick one and
-execute before any public posting.
+**Remaining launch-day action:** Make the repo public before any
+public posting so the Go module proxy can fetch the code.
 
 ---
 
