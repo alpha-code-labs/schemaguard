@@ -108,24 +108,35 @@ promises). Ready for one final editing pass before launch day.
 
 ---
 
-## 5. Publish GitHub Action to Marketplace
+## 5. ~~Publish GitHub Action to Marketplace~~ ✅ PREPARED (one manual UI step remains)
 
-**Issue.** `action.yml` exists at the repo root with correct
-schema, branding (shield icon, blue), and inputs. But the Action
-has not been published to the GitHub Marketplace. Without a
-Marketplace listing, users can still use the Action via
-`uses: <owner>/schemaguard@v0.1.0`, but they will not discover it
-through GitHub's Marketplace search.
+**Status.** The `action.yml` is fully Marketplace-ready. Every
+requirement has been verified:
 
-**Why it matters.** The Marketplace is a discovery channel. Platform
-engineers searching for "postgres migration" or "schema check" in
-the Marketplace would find SchemaGuard if it were listed. Without
-the listing, the only discovery paths are the README, HN, and
-direct links.
+- Public repo: `private: false` ✅
+- Valid `action.yml` at repo root with all required fields ✅
+- `name: SchemaGuard` ✅
+- `description` present and accurate ✅
+- `author: SchemaGuard contributors` ✅
+- `branding.icon: shield`, `branding.color: blue` ✅
+- Six inputs, two outputs, `runs.using: composite` ✅
+- Release `v0.1.0` exists (not draft, not pre-release) ✅
+- README has a "GitHub Action" section with a correct usage example ✅
+- Admin permissions on the repo: confirmed ✅
 
-**Blocks launch?** No. The Action works without a Marketplace
-listing. Users just reference it by repo path.
+**The one remaining step** is a manual GitHub web UI action that
+cannot be performed via the CLI or API:
 
-**Smallest next action.** Go to the repo's settings → Actions →
-"Publish this Action to the GitHub Marketplace." Fill in the
-description and categories. Takes ~5 minutes.
+1. Go to https://github.com/alpha-code-labs/schemaguard/releases/tag/v0.1.0
+2. Click **Edit** on the release
+3. Check the **"Publish this Action to the GitHub Marketplace"** box
+4. Select primary category: **Code quality**
+5. Select secondary category: **Continuous integration**
+6. Click **Update release**
+
+This takes under 2 minutes.
+
+**Blocks launch?** No. The Action works without a Marketplace listing.
+Users reference it by `uses: alpha-code-labs/schemaguard@v0.1.0`.
+The Marketplace listing is a discovery channel, not a functional
+requirement.
