@@ -1,10 +1,5 @@
-name: SchemaGuard
-description: >-
-  Verify Postgres migrations against production-like data before
-  deployment. Runs SchemaGuard against the migration SQL and a
-  user-supplied shadow-database snapshot inside the Action runner,
-  then posts (or updates) a PR comment carrying the verdict, lock
-  findings, and query-plan regression findings.
+name: SchemaGuard Action
+description: Verify Postgres migrations against production-like data before deployment.
 author: SchemaGuard contributors
 
 branding:
