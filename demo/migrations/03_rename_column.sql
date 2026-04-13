@@ -1,0 +1,22 @@
+-- Canonical failure case #3 — RENAME COLUMN referenced by a top query.
+--
+-- The `schemaguard.yaml` config in this demo declares a top query
+-- `orders_by_customer` that reads `WHERE customer_id = 42`. This
+-- migration renames that column to `user_id`. After the migration,
+-- the top query's EXPLAIN fails with "column \"customer_id\" does
+-- not exist" — the query is broken for production traffic the moment
+-- this migration ships.
+--
+-- The rename itself is a metadata-only change inside Postgres (fast
+-- and cheap from a lock-risk perspective). The real damage is in the
+-- plan-regression analyzer, not the lock analyzer.
+--
+-- Expected SchemaGuard finding:
+--   * Query Plan Regressions: `[stop / broken]` on
+--     `orders_by_customer` with the exact Postgres error ("column
+--     \"customer_id\" does not exist") surfaced in Impact.
+--   * The other top queries (`orders_by_status`, `recent_orders`)
+--     remain unaffected and produce no findings.
+--   * Verdict: RED (stop).
+
+ALTER TABLE orders RENAME COLUMN customer_id TO user_id;

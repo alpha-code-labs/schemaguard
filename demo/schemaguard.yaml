@@ -1,0 +1,33 @@
+# SchemaGuard demo — top-query config.
+#
+# Three hand-curated queries exercise the plan-regression analyzer
+# against the demo's canonical failure migrations:
+#
+#   * orders_by_customer — referenced by the RENAME COLUMN migration
+#     (03). When that migration ships, the baseline EXPLAIN of this
+#     query succeeds (Index Scan on idx_orders_customer), and the
+#     post-migration EXPLAIN fails with "column \"customer_id\" does
+#     not exist" — producing a KindQueryBroken finding.
+#
+#   * orders_by_status — survives every canonical migration. Exists
+#     so the demo shows the analyzer correctly *not* flagging queries
+#     that are unaffected by the change.
+#
+#   * recent_orders — a slightly more complex predicate against
+#     created_at. Stays healthy across the four canonical cases and
+#     will also surface as unchanged.
+#
+# Thresholds are intentionally omitted: the committed M4 defaults
+# (docs/DECISIONS.md → "Query plan diff thresholds (first-pass)") are
+# what the demo is meant to showcase. Any user overriding them in
+# their own project should do so in their own schemaguard.yaml.
+
+queries:
+  - id: orders_by_customer
+    sql: SELECT id, amount, status FROM orders WHERE customer_id = 42
+
+  - id: orders_by_status
+    sql: SELECT status, count(*) FROM orders WHERE status = 'pending' GROUP BY status
+
+  - id: recent_orders
+    sql: SELECT id, customer_id, amount FROM orders WHERE created_at > now() - interval '30 days' ORDER BY created_at DESC LIMIT 100

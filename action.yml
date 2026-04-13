@@ -1,0 +1,91 @@
+name: SchemaGuard
+description: >-
+  Verify Postgres migrations against production-like data before
+  deployment. Runs SchemaGuard against the migration SQL and a
+  user-supplied shadow-database snapshot inside the Action runner,
+  then posts (or updates) a PR comment carrying the verdict, lock
+  findings, and query-plan regression findings.
+author: SchemaGuard contributors
+
+branding:
+  icon: shield
+  color: blue
+
+inputs:
+  migration:
+    description: >-
+      Path to the migration SQL file or directory, relative to the PR
+      checkout ($GITHUB_WORKSPACE).
+    required: true
+  snapshot-path:
+    description: >-
+      Path to a Postgres dump file (.sql, .dump, or .tar) relative to
+      the PR checkout. Use this for dumps that live in the repository
+      itself. Exactly one of snapshot-path or snapshot-url must be set.
+    required: false
+    default: ''
+  snapshot-url:
+    description: >-
+      HTTPS URL of a Postgres dump file. The Action downloads it to a
+      temp file on the runner before running SchemaGuard. Use this for
+      dumps that are too large to commit to the repository. Exactly
+      one of snapshot-path or snapshot-url must be set. A 10-minute
+      download timeout is enforced.
+    required: false
+    default: ''
+  config:
+    description: >-
+      Optional path to a schemaguard.yaml file relative to the PR
+      checkout. When omitted, query-plan regression analysis is
+      silently disabled; lock analysis still runs.
+    required: false
+    default: ''
+  github-token:
+    description: >-
+      Token used to post or update the PR comment. Defaults to the
+      workflow GITHUB_TOKEN. The token must have pull-requests:write
+      permission.
+    required: false
+    default: ${{ github.token }}
+  go-version:
+    description: >-
+      Go toolchain version used by setup-go to build the SchemaGuard
+      binary on the runner.
+    required: false
+    default: 'stable'
+
+outputs:
+  verdict:
+    description: 'One of: green, yellow, red, tool_error.'
+    value: ${{ steps.schemaguard.outputs.verdict }}
+  exit-code:
+    description: 'Exit code from `schemaguard check` (0/1/2/3).'
+    value: ${{ steps.schemaguard.outputs.exit-code }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ inputs.go-version }}
+        cache: false
+
+    - name: Build SchemaGuard CLI
+      shell: bash
+      run: |
+        set -euo pipefail
+        cd "${GITHUB_ACTION_PATH}"
+        go build -o "${RUNNER_TEMP}/schemaguard" ./cmd/schemaguard
+
+    - name: Run SchemaGuard and upsert PR comment
+      id: schemaguard
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        INPUT_MIGRATION: ${{ inputs.migration }}
+        INPUT_SNAPSHOT_PATH: ${{ inputs.snapshot-path }}
+        INPUT_SNAPSHOT_URL: ${{ inputs.snapshot-url }}
+        INPUT_CONFIG: ${{ inputs.config }}
+      run: |
+        bash "${GITHUB_ACTION_PATH}/action/entrypoint.sh"

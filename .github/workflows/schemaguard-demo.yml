@@ -1,0 +1,129 @@
+name: SchemaGuard Demo
+
+# Demo workflow for Milestone 7.5. Wires the local SchemaGuard
+# GitHub Action (the M6 action.yml at the repo root) to the demo
+# fixtures under demo/ so any pull request touching one of the
+# canonical failure migrations posts a Markdown review comment
+# for THAT SPECIFIC migration.
+#
+# Per docs/tasks.md 7.5: "Verify each failure-mode PR produces a
+# correct Markdown comment."
+#
+# Per docs/launch_plan.md: "5 pre-made migration PRs, each
+# triggering a distinct failure."
+#
+# In a real user's repo the workflow would reference the published
+# action (e.g. `uses: schemaguard/schemaguard@v1`) and point at
+# their own migration file, snapshot, and config. Here we reference
+# `./` so the workflow exercises the action as it is in this repo.
+
+on:
+  pull_request:
+    paths:
+      - 'demo/**'
+      - 'action.yml'
+      - 'action/**'
+      - 'internal/**'
+      - 'cmd/**'
+  workflow_dispatch:
+    inputs:
+      migration:
+        description: 'Which canonical demo migration to exercise (01-04)'
+        required: true
+        default: '01'
+        type: choice
+        options:
+          - '01'
+          - '02'
+          - '03'
+          - '04'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  schemaguard-demo:
+    name: SchemaGuard demo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR
+        uses: actions/checkout@v4
+        with:
+          # fetch-depth 0 so git diff against the base branch works
+          # for changed-file detection on pull_request events.
+          fetch-depth: 0
+
+      - name: Select demo migration
+        id: pick
+        shell: bash
+        run: |
+          set -uo pipefail
+
+          case "${{ github.event_name }}" in
+            workflow_dispatch)
+              # Manual trigger — the user picks explicitly via the
+              # dropdown. Map the number to the migration file path.
+              N="${{ github.event.inputs.migration }}"
+              case "$N" in
+                01) F="demo/migrations/01_add_column_not_null_default.sql" ;;
+                02) F="demo/migrations/02_create_index_blocking.sql"      ;;
+                03) F="demo/migrations/03_rename_column.sql"              ;;
+                04) F="demo/migrations/04_add_check_constraint.sql"       ;;
+                *)  echo "::error::unknown migration number '$N'"; exit 1 ;;
+              esac
+              echo "migration=$F" >> "$GITHUB_OUTPUT"
+              echo "==> workflow_dispatch: selected $F"
+              ;;
+
+            pull_request)
+              # PR trigger — detect which canonical demo migration
+              # file was changed in this PR. This is the path that
+              # makes "each failure-mode PR produces a correct
+              # Markdown comment" (tasks.md 7.5) work: a PR that
+              # touches migration 03 runs migration 03, not 01.
+              CHANGED=$(git diff --name-only \
+                "origin/${{ github.base_ref }}" -- \
+                'demo/migrations/*.sql' 2>/dev/null || echo "")
+
+              COUNT=$(echo "$CHANGED" | grep -c '\.sql$' || true)
+
+              if [[ "$COUNT" -eq 0 ]]; then
+                # PR touches demo/ (or action/internal/cmd) but not
+                # a specific canonical migration file. Skip the
+                # SchemaGuard run so we don't post a misleading
+                # comment for a migration the PR didn't change.
+                echo "skip=true" >> "$GITHUB_OUTPUT"
+                echo "==> pull_request: no demo migration file changed — skipping SchemaGuard run."
+                exit 0
+              fi
+
+              if [[ "$COUNT" -gt 1 ]]; then
+                # Multiple migration files changed in one PR. This
+                # breaks the one-comment-per-PR model (the M6 upsert
+                # marker is shared). Fail clearly rather than picking
+                # one and posting a potentially misleading comment.
+                echo "::error::pull_request: $COUNT demo migration files changed in this PR. The demo workflow supports exactly one migration per PR so each PR gets its own accurate SchemaGuard comment. Please open separate PRs for each migration."
+                echo "Changed files:"
+                echo "$CHANGED"
+                exit 1
+              fi
+
+              F="$CHANGED"
+              echo "migration=$F" >> "$GITHUB_OUTPUT"
+              echo "==> pull_request: detected changed migration: $F"
+              ;;
+
+            *)
+              echo "::error::unexpected event '${{ github.event_name }}'"
+              exit 1
+              ;;
+          esac
+
+      - name: Run SchemaGuard action
+        if: steps.pick.outputs.skip != 'true'
+        uses: ./
+        with:
+          migration:     ${{ steps.pick.outputs.migration }}
+          snapshot-path: demo/snapshot/demo.dump
+          config:        demo/schemaguard.yaml
