@@ -12,11 +12,11 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"github.com/schemaguard/schemaguard/internal/executor"
-	"github.com/schemaguard/schemaguard/internal/lockanalyzer"
-	"github.com/schemaguard/schemaguard/internal/planregression"
-	"github.com/schemaguard/schemaguard/internal/report"
-	"github.com/schemaguard/schemaguard/internal/shadowdb"
+	"github.com/alpha-code-labs/schemaguard/internal/executor"
+	"github.com/alpha-code-labs/schemaguard/internal/lockanalyzer"
+	"github.com/alpha-code-labs/schemaguard/internal/planregression"
+	"github.com/alpha-code-labs/schemaguard/internal/report"
+	"github.com/alpha-code-labs/schemaguard/internal/shadowdb"
 )
 
 // runCheck is the `schemaguard check` subcommand entry point. It parses

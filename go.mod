@@ -1,4 +1,4 @@
-module github.com/schemaguard/schemaguard
+module github.com/alpha-code-labs/schemaguard
 
 go 1.25.0
 

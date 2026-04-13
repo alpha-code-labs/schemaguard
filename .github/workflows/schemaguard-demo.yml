@@ -13,7 +13,7 @@ name: SchemaGuard Demo
 # triggering a distinct failure."
 #
 # In a real user's repo the workflow would reference the published
-# action (e.g. `uses: schemaguard/schemaguard@v1`) and point at
+# action (e.g. `uses: alpha-code-labs/schemaguard@v1`) and point at
 # their own migration file, snapshot, and config. Here we reference
 # `./` so the workflow exercises the action as it is in this repo.
 

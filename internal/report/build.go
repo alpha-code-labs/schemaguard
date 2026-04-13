@@ -5,9 +5,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/schemaguard/schemaguard/internal/executor"
-	"github.com/schemaguard/schemaguard/internal/lockanalyzer"
-	"github.com/schemaguard/schemaguard/internal/planregression"
+	"github.com/alpha-code-labs/schemaguard/internal/executor"
+	"github.com/alpha-code-labs/schemaguard/internal/lockanalyzer"
+	"github.com/alpha-code-labs/schemaguard/internal/planregression"
 )
 
 // SchemaVersion is the top-level version stamp for JSON consumers.
@@ -18,7 +18,7 @@ const SchemaVersion = "1"
 
 // DefaultDocsURL is the URL embedded in the report footer. It
 // points at the repository root until a published docs site exists.
-const DefaultDocsURL = "https://github.com/schemaguard/schemaguard"
+const DefaultDocsURL = "https://github.com/alpha-code-labs/schemaguard"
 
 // Input is the set of per-run values the report builder consumes.
 // Every field is optional in the sense that the builder will cope

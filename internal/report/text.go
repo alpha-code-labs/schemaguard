@@ -29,7 +29,7 @@ import (
 //
 //	───
 //	SchemaGuard 0.0.0-dev · run 1.2s · migration 0.5s · restore 0.3s · shadow postgres:16-alpine (12 MB)
-//	https://github.com/schemaguard/schemaguard
+//	https://github.com/alpha-code-labs/schemaguard
 func FormatText(r *Report) string {
 	var b strings.Builder
 

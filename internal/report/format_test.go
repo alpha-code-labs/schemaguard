@@ -37,7 +37,7 @@ func sampleReport() *Report {
 			RestoreDuration:   300 * time.Millisecond,
 			ShadowDBImage:     "postgres:16-alpine",
 			ShadowDBSizeBytes: 12 * 1024 * 1024,
-			DocsURL:           "https://github.com/schemaguard/schemaguard",
+			DocsURL:           "https://github.com/alpha-code-labs/schemaguard",
 		},
 	}
 }

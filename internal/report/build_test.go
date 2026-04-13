@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/schemaguard/schemaguard/internal/executor"
-	"github.com/schemaguard/schemaguard/internal/lockanalyzer"
-	"github.com/schemaguard/schemaguard/internal/planregression"
+	"github.com/alpha-code-labs/schemaguard/internal/executor"
+	"github.com/alpha-code-labs/schemaguard/internal/lockanalyzer"
+	"github.com/alpha-code-labs/schemaguard/internal/planregression"
 )
 
 func TestSchemaVersionIsPinned(t *testing.T) {

@@ -6,7 +6,7 @@ package main
 import (
 	"os"
 
-	"github.com/schemaguard/schemaguard/internal/cli"
+	"github.com/alpha-code-labs/schemaguard/internal/cli"
 )
 
 func main() {

@@ -7,7 +7,7 @@ Catch unsafe Postgres migrations in CI — by actually running them.
 ## Install
 
 ```bash
-go install github.com/schemaguard/schemaguard/cmd/schemaguard@latest
+go install github.com/alpha-code-labs/schemaguard/cmd/schemaguard@latest
 ```
 
 Requires Go 1.25+ and a running Docker daemon.
@@ -16,10 +16,10 @@ Requires Go 1.25+ and a running Docker daemon.
 
 ```bash
 # 1. Install
-go install github.com/schemaguard/schemaguard/cmd/schemaguard@latest
+go install github.com/alpha-code-labs/schemaguard/cmd/schemaguard@latest
 
 # 2. Clone the demo
-git clone https://github.com/schemaguard/schemaguard.git
+git clone https://github.com/alpha-code-labs/schemaguard.git
 cd schemaguard
 
 # 3. Run against a canonical failure migration
@@ -102,7 +102,7 @@ schemaguard check --help
 ## GitHub Action
 
 ```yaml
-- uses: schemaguard/schemaguard@v0.1.0
+- uses: alpha-code-labs/schemaguard@v0.1.0
   with:
     migration:     path/to/migration.sql
     snapshot-path: path/to/snapshot.dump

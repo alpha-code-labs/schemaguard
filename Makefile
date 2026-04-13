@@ -1,5 +1,5 @@
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "0.0.0-dev")
-LDFLAGS  = -X github.com/schemaguard/schemaguard/internal/cli.Version=$(VERSION)
+LDFLAGS  = -X github.com/alpha-code-labs/schemaguard/internal/cli.Version=$(VERSION)
 
 .PHONY: build install test vet clean
 

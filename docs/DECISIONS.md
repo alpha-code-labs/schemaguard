@@ -169,7 +169,7 @@ Update rules are at the bottom. Read them before editing.
 
 ### Decision: Language / runtime is Go
 - **Status:** Confirmed (resolved in Milestone 1, task 1.1)
-- **Decision:** SchemaGuard is written in Go. Module path: `github.com/schemaguard/schemaguard`. Go version: 1.22. Standard library only for Milestone 1 — no third-party dependencies unless a later milestone requires one.
+- **Decision:** SchemaGuard is written in Go. Module path: `github.com/alpha-code-labs/schemaguard`. Go version: 1.22. Standard library only for Milestone 1 — no third-party dependencies unless a later milestone requires one.
 - **Why:** Go produces a single static binary that is trivial to distribute via `go install`, Homebrew, and GitHub Releases — important for an OSS CLI targeting platform engineers. It has a mature, widely-used Postgres driver (`pgx`), a first-class Docker SDK for the shadow DB runner, and idiomatic CLI tooling patterns. It is faster to prototype than Rust and easier to ship as a single command than Python. Rust was a reasonable alternative but the distribution story is the same and the iteration speed is slower; Python loses on single-binary packaging.
 - **Implication:** The project root is a Go module. Source lives under `cmd/schemaguard/` (binary entry) and `internal/` (packages matching the primary components in `build_spec.md`). Build command: `go build ./cmd/schemaguard`. Test command: `go test ./...`. Milestone 1 uses only the Go standard library; any third-party dependency introduced in a later milestone must be justified against Technical Constraint 5 in `build_spec.md` ("Every added dependency is a liability").
 
